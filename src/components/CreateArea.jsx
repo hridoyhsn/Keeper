@@ -1,43 +1,48 @@
 import React, { useState } from "react";
-import { isPropertySignature } from "typescript";
 
 function CreateArea(props) {
   const [note, setNote] = useState({
     title: "",
-    content: "",
+    content: ""
   });
+
   function handleChange(event) {
-    const newName = event.target.name;
-    const newValue = event.target.value;
-    setNote((preValue) => {
+    const { name, value } = event.target;
+
+    setNote(prevNote => {
       return {
-        ...preValue,
-        [newName]: newValue,
+        ...prevNote,
+        [name]: value
       };
     });
   }
-  function submitBtn(event) {
+
+  function submitNote(event) {
+    props.onAdd(note);
+    setNote({
+      title: "",
+      content: ""
+    });
     event.preventDefault();
-    props.OnAdd(note);
-    setNote({ title: "", content: "" });
   }
+
   return (
     <div>
-      <form>
+      <form className="create-note">
         <input
-          onChange={handleChange}
           name="title"
-          placeholder="Title"
+          onChange={handleChange}
           value={note.title}
+          placeholder="Title"
         />
         <textarea
-          onChange={handleChange}
           name="content"
+          onChange={handleChange}
+          value={note.content}
           placeholder="Take a note..."
           rows="3"
-          value={note.content}
         />
-        <button onClick={submitBtn}>Add</button>
+        <button onClick={submitNote}>Add</button>
       </form>
     </div>
   );
